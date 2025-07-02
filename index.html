@@ -1,106 +1,707 @@
-<!DOCTYPE html>
+           <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skin Cancer Basics | Skin Cancer | CDC</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Knowledge Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 2.6;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .quiz-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .quiz-content {
+            padding: 40px;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .difficulty-badge {
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy { background: #d4edda; color: #155724; }
+        .difficulty-medium { background: #fff3cd; color: #856404; }
+        .difficulty-hard { background: #f8d7da; color: #721c24; }
+
+        .question-text {
+            font-size: 1.4em;
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            margin-bottom: 15px;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            display: block;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option label:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .option label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #667eea;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .option input[type="radio"]:checked + label::before {
+            transform: scaleY(1);
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .score-message {
+            font-size: 1.5em;
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .score-item-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .score-item-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .explanation {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
+        }
+
+        .explanation h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .explanation p {
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .restart-btn {
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .quiz-content {
+                padding: 20px;
+            }
+
+            .quiz-title {
+                font-size: 2em;
+            }
+
+            .question-text {
+                font-size: 1.2em;
+            }
+
+            .quiz-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .score-display {
+                font-size: 3em;
+            }
+        }
+    </style>
 </head>
-<body style="font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1a202c; background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%); min-height: 100vh; margin: 0; padding: 40px 20px;">
-<div style="max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 16px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 20px rgba(0, 0, 0, 0.05); padding: 40px; position: relative; overflow: hidden;">
-<h1 style="color: #1a202c; font-size: 2.5em; margin-bottom: 0.5em; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative;">Skin Cancer Basics | Skin Cancer | CDC</h1>
-<div style="background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); padding: 20px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9em; border-left: 4px solid #667eea; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);"><strong>Source:</strong> <a href="https://www.cdc.gov/skin-cancer/about/index.html" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/skin-cancer/about/index.html</a><br><strong>Scraped:</strong> 2025-07-02T12:16:12.334230<br><strong>Author:</strong> CDC<br><strong>Description:</strong> Skin cancer is the most common cancer in the United States.</div>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Skin Cancer Knowledge Quiz</h1>
+            <p class="quiz-subtitle">Test your knowledge with this interactive quiz</p>
+        </div>
 
-<main>
-<section>
-<time>July 1, 2024</time>
-<div>
-<a href="/skin-cancer/es/about/index.html" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">Español</a>
-</div>
-</section>
-<div>
-<h1 style="color: #1a202c; font-size: 2.5em; margin-bottom: 0.5em; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative;">Skin Cancer Basics</h1>
-</div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">Key points</h2>
-</div>
-<div>
-<ul style="margin-bottom: 1em; padding-left: 20px;">
-<li style="margin-bottom: 0.5em; color: #2d3748;">Skin cancer is a disease in which cells in the skin grow out of control.</li>
-<li style="margin-bottom: 0.5em; color: #2d3748;">Most cases of skin cancer are caused by overexposure to ultraviolet (UV) rays from the sun, tanning beds, or sunlamps.</li>
-</ul>
-<div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">More Information</h2>
-</div>
-<div>
-<a href="/skin-cancer/site.html#gen" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">For Everyone</a>
-<a href="/skin-cancer/site.html#php" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">Public Health</a>
-</div>
-</div>
-</div>
-<div>
-<figure>
-<div>
-<img alt="a father putting sunscreen on his young daughter" src="https://www.cdc.gov/skin-cancer/media/images/dad-daughter-sunscreen-1200x675-1.jpg" style="max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);"/>
-</div>
-</figure>
-</div>
-</div>
-</div>
-<div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">What it is</h2>
-<p style="margin-bottom: 1em; color: #2d3748;">Skin cancer is the most common cancer in the United States. Some people are at <a href="/skin-cancer/risk-factors/index.html" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">higher risk</a> of skin cancer than others, but anyone can get it. The most preventable cause of skin cancer is overexposure to ultraviolet (UV) light, either from the sun or from artificial sources like tanning beds.</p>
-<figure>
-<div>
-<span><a href="#" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">View Larger</a></span>
-</div>
-<div>
-<img alt="Diagram showing the basal and squamous cell layers of the skin." src="https://www.cdc.gov/skin-cancer/media/images/skin-illustration-16x9-1.jpg" style="max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);"/>
-</div>
-<div>
-<figcaption>This diagram shows the basal and squamous cell layers of the skin.</figcaption>
-</div>
-</figure>
-<p style="margin-bottom: 1em; color: #2d3748;">The skin is the body's largest organ. Skin has several layers, but the two main layers are the epidermis (upper or outer layer) and the dermis (lower or inner layer). Skin cancer begins in the epidermis, which is made up of three kinds of cells:</p>
-<ul style="margin-bottom: 1em; padding-left: 20px;">
-<li style="margin-bottom: 0.5em; color: #2d3748;"><strong style="color: #1a202c; font-weight: 600;">Squamous cells:</strong> Thin, flat cells that form the top layer of the epidermis.</li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><strong style="color: #1a202c; font-weight: 600;">Basal cells:</strong> Round cells under the squamous cells.</li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><strong style="color: #1a202c; font-weight: 600;">Melanocytes:</strong> Cells that make melanin and are found in the lower part of the epidermis. Melanin is the pigment that gives skin its color. When skin is exposed to the sun, melanocytes make more pigment and cause the skin to darken.</li>
-</ul>
-</div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">Types</h2>
-<p style="margin-bottom: 1em; color: #2d3748;">Basal and squamous cell carcinomas are the two most common types of skin cancer. They begin in the basal and squamous layers of the skin, respectively. Both can usually be cured, but treatment is expensive and can leave scars.</p>
-<p style="margin-bottom: 1em; color: #2d3748;">Melanoma, the third most common type of skin cancer, begins in the melanocytes. Of all types of skin cancer, melanoma causes the most deaths because of its tendency to spread to other parts of the body, including vital organs like the brain and liver.</p>
-</div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">Causes</h2>
-<p style="margin-bottom: 1em; color: #2d3748;">Most cases of skin cancer are caused by overexposure to UV rays from the sun, tanning beds, or sunlamps. UV rays can damage skin cells. In the short term, this damage can cause a sunburn. Over time, UV damage adds up, leading to changes in skin texture, premature skin aging, and sometimes skin cancer. UV rays also have been linked to eye conditions such as cataracts.</p>
-</div>
-<div>
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">Resources</h2>
-<ul style="margin-bottom: 1em; padding-left: 20px;">
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cancer.gov/types/skin" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">Skin Cancer</a> (National Cancer Institute)</li>
-</ul>
-</div>
-</div>
-</div></div></main>
+        <div class="quiz-content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
 
-<h2 style="color: #2d3748; font-size: 1.8em; margin-top: 1.5em; margin-bottom: 0.5em; font-weight: 600; position: relative;">Images Referenced</h2>
-<ul style="margin-bottom: 1em; padding-left: 20px;">
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/TemplatePackage/5.0/img/uswds/us_flag_small.png" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/TemplatePackage/5.0/img/uswds/us_flag_small.png</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/TemplatePackage/5.0/img/uswds/icon-dot-gov.svg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/TemplatePackage/5.0/img/uswds/icon-dot-gov.svg</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/TemplatePackage/5.0/img/uswds/icon-https.svg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/TemplatePackage/5.0/img/uswds/icon-https.svg</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/TemplatePackage/5.0/img/logo/logo-notext.svg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/TemplatePackage/5.0/img/logo/logo-notext.svg</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/skin-cancer/media/images/dad-daughter-sunscreen-1200x675-1.jpg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/skin-cancer/media/images/dad-daughter-sunscreen-1200x675-1.jpg</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/skin-cancer/media/images/skin-illustration-16x9-1.jpg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/skin-cancer/media/images/skin-illustration-16x9-1.jpg</a></li>
-<li style="margin-bottom: 0.5em; color: #2d3748;"><a href="https://www.cdc.gov/TemplatePackage/5.0/img/logo/cdc-logo-tag-right.svg" style="color: #667eea; text-decoration: none; font-weight: 500; transition: all 0.2s ease; border-bottom: 1px solid transparent;">https://www.cdc.gov/TemplatePackage/5.0/img/logo/cdc-logo-tag-right.svg</a></li>
-</ul>
-</div>
+            <div id="questionContainer">
+                <!-- Questions will be dynamically inserted here -->
+            </div>
+
+            <div class="results-container" id="resultsContainer">
+                <div class="score-display" id="scoreDisplay">0%</div>
+                <div class="score-message" id="scoreMessage">Great job!</div>
+                
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <div class="score-item-label">Correct Answers</div>
+                        <div class="score-item-value" id="correctCount">0</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-label">Total Questions</div>
+                        <div class="score-item-value" id="totalQuestions">10</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-item-label">Percentage</div>
+                        <div class="score-item-value" id="percentageScore">0%</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary restart-btn" onclick="restartQuiz()">
+                    Take Quiz Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+        {
+                "id": 0,
+                "question": "What is the most common cancer in the United States?",
+                "options": [
+                        "Lung cancer",
+                        "Breast cancer",
+                        "Skin cancer",
+                        "Prostate cancer"
+                ],
+                "correct": 2,
+                "explanation": "According to the CDC, skin cancer is the most common cancer in the United States.",
+                "difficulty": "easy",
+                "category": "general"
+        },
+        {
+                "id": 1,
+                "question": "What is the most preventable cause of skin cancer?",
+                "options": [
+                        "Genetic factors",
+                        "Overexposure to ultraviolet (UV) light",
+                        "Poor diet",
+                        "Lack of exercise"
+                ],
+                "correct": 1,
+                "explanation": "Most cases of skin cancer are caused by overexposure to ultraviolet (UV) rays from the sun, tanning beds, or sunlamps.",
+                "difficulty": "medium",
+                "category": "prevention"
+        },
+        {
+                "id": 2,
+                "question": "Skin cancer begins in which layer of the skin?",
+                "options": [
+                        "Dermis",
+                        "Epidermis",
+                        "Subcutaneous tissue",
+                        "Muscle tissue"
+                ],
+                "correct": 1,
+                "explanation": "Skin cancer begins in the epidermis, which is the upper or outer layer of the skin.",
+                "difficulty": "medium",
+                "category": "anatomy"
+        },
+        {
+                "id": 3,
+                "question": "Which cells in the epidermis produce melanin?",
+                "options": [
+                        "Squamous cells",
+                        "Basal cells",
+                        "Melanocytes",
+                        "Keratinocytes"
+                ],
+                "correct": 2,
+                "explanation": "Melanocytes are cells that make melanin and are found in the lower part of the epidermis. Melanin is the pigment that gives skin its color.",
+                "difficulty": "hard",
+                "category": "anatomy"
+        },
+        {
+                "id": 4,
+                "question": "Which type of skin cancer causes the most deaths?",
+                "options": [
+                        "Basal cell carcinoma",
+                        "Squamous cell carcinoma",
+                        "Melanoma",
+                        "Actinic keratosis"
+                ],
+                "correct": 2,
+                "explanation": "Melanoma causes the most deaths because of its tendency to spread to other parts of the body, including vital organs like the brain and liver.",
+                "difficulty": "medium",
+                "category": "types"
+        },
+        {
+                "id": 5,
+                "question": "What is a short-term effect of UV ray damage to skin cells?",
+                "options": [
+                        "Melanoma",
+                        "Sunburn",
+                        "Cataracts",
+                        "Premature aging"
+                ],
+                "correct": 1,
+                "explanation": "In the short term, UV damage can cause a sunburn. Over time, UV damage adds up, leading to changes in skin texture, premature skin aging, and sometimes skin cancer.",
+                "difficulty": "easy",
+                "category": "effects"
+        },
+        {
+                "id": 6,
+                "question": "What are the two most common types of skin cancer?",
+                "options": [
+                        "Melanoma and lymphoma",
+                        "Basal cell and squamous cell carcinomas",
+                        "Adenocarcinoma and sarcoma",
+                        "Merkel cell and sebaceous carcinomas"
+                ],
+                "correct": 1,
+                "explanation": "Basal and squamous cell carcinomas are the two most common types of skin cancer. They begin in the basal and squamous layers of the skin, respectively.",
+                "difficulty": "medium",
+                "category": "types"
+        },
+        {
+                "id": 7,
+                "question": "Can basal and squamous cell carcinomas usually be cured?",
+                "options": [
+                        "No, they are always fatal",
+                        "Yes, but treatment is expensive",
+                        "Only with chemotherapy",
+                        "Only if caught early"
+                ],
+                "correct": 1,
+                "explanation": "Both basal and squamous cell carcinomas can usually be cured, but treatment is expensive and can leave scars.",
+                "difficulty": "easy",
+                "category": "treatment"
+        },
+        {
+                "id": 8,
+                "question": "Which of the following are sources of harmful UV rays?",
+                "options": [
+                        "Only the sun",
+                        "Sun and tanning beds only",
+                        "Sun, tanning beds, and sunlamps",
+                        "Only artificial sources"
+                ],
+                "correct": 2,
+                "explanation": "UV rays come from the sun, tanning beds, and sunlamps. All of these sources can cause skin damage that leads to cancer.",
+                "difficulty": "medium",
+                "category": "prevention"
+        },
+        {
+                "id": 9,
+                "question": "Besides skin cancer, what other condition have UV rays been linked to?",
+                "options": [
+                        "Diabetes",
+                        "Heart disease",
+                        "Eye conditions such as cataracts",
+                        "Kidney disease"
+                ],
+                "correct": 2,
+                "explanation": "UV rays also have been linked to eye conditions such as cataracts, in addition to their effects on skin.",
+                "difficulty": "hard",
+                "category": "effects"
+        }
+];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        function initQuiz() {
+            renderQuestion(currentQuestion);
+            updateProgress();
+        }
+
+        function renderQuestion(questionIndex) {
+            const question = quizData[questionIndex];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="question-container active">
+                    <div class="question-header">
+                        <div class="question-number">Question ${questionIndex + 1} of ${quizData.length}</div>
+                        <div class="difficulty-badge difficulty-${question.difficulty}">
+                            ${question.difficulty}
+                        </div>
+                    </div>
+                    
+                    <div class="question-text">
+                        ${question.question}
+                    </div>
+                    
+                    <ul class="options">
+                        ${question.options.map((option, index) => `
+                            <li class="option">
+                                <input type="radio" id="option${index}" name="answer" value="${index}">
+                                <label for="option${index}">${option}</label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    
+                    <div class="explanation" id="explanation">
+                        <h4>Explanation:</h4>
+                        <p>${question.explanation}</p>
+                    </div>
+                    
+                    <div class="quiz-controls">
+                        <button class="btn btn-secondary" onclick="previousQuestion()" 
+                                ${questionIndex === 0 ? 'disabled' : ''}>
+                            Previous
+                        </button>
+                        
+                        <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                            ${questionIndex === quizData.length - 1 ? 'Finish Quiz' : 'Next Question'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners to radio buttons
+            const radioButtons = container.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', handleAnswerSelection);
+            });
+
+            // Restore previous answer if exists
+            if (userAnswers[questionIndex] !== undefined) {
+                const savedAnswer = userAnswers[questionIndex];
+                const radioToCheck = container.querySelector(`input[value="${savedAnswer}"]`);
+                if (radioToCheck) {
+                    radioToCheck.checked = true;
+                    document.getElementById('nextBtn').disabled = false;
+                    showExplanation();
+                }
+            }
+        }
+
+        function handleAnswerSelection(event) {
+            const selectedValue = parseInt(event.target.value);
+            userAnswers[currentQuestion] = selectedValue;
+            document.getElementById('nextBtn').disabled = false;
+            
+            // Show explanation after selection
+            setTimeout(showExplanation, 300);
+        }
+
+        function showExplanation() {
+            const explanation = document.getElementById('explanation');
+            explanation.classList.add('show');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                renderQuestion(currentQuestion);
+                updateProgress();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion(currentQuestion);
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        function finishQuiz() {
+            calculateScore();
+            showResults();
+        }
+
+        function calculateScore() {
+            score = 0;
+            for (let i = 0; i < quizData.length; i++) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    score++;
+                }
+            }
+        }
+
+        function showResults() {
+            document.getElementById('questionContainer').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('active');
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            
+            document.getElementById('scoreDisplay').textContent = `${percentage}%`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+            document.getElementById('percentageScore').textContent = `${percentage}%`;
+            
+            // Set message based on score
+            let message = '';
+            if (percentage >= 90) {
+                message = 'Excellent! You have mastered this topic!';
+            } else if (percentage >= 80) {
+                message = 'Great job! You have a strong understanding!';
+            } else if (percentage >= 70) {
+                message = 'Good work! You understand most concepts!';
+            } else if (percentage >= 60) {
+                message = 'Not bad! Consider reviewing the material.';
+            } else {
+                message = 'Keep studying! You can improve with practice.';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+            
+            document.getElementById('questionContainer').style.display = 'block';
+            document.getElementById('resultsContainer').classList.remove('active');
+            
+            initQuiz();
+        }
+
+        // Initialize quiz when page loads
+        window.addEventListener('DOMContentLoaded', initQuiz);
+    </script>
 </body>
 </html>
